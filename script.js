@@ -70,7 +70,7 @@ const gameBoard = (()=>{
         }
             if (val === 1){console.log("p2");
             if (players.isp2Human()===false){
-                resultField.textContent = `The machine feels nothing toward you, ${players.pOne.name} .`
+                resultField.textContent = `The machine feels nothing towards you, ${players.pOne.name} .`
 
             }
 

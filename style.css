@@ -50,6 +50,7 @@
     font-family: cursive;
     font-weight: normal; 
     padding-bottom: 50px;
+    font-style: italic;
   }
   .main{
     max-width: 800px;
@@ -65,18 +66,24 @@
     grid-template-columns: 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr;
     align-content: center;
+    border:2px solid black;
+    
+    
    
     
   }
   .cell {
-    height: 150px;
+    height: 120px;
     display: flex;
     text-align: center;
     align-items: center;
     justify-content: center;
+    
+    border:1px solid black;
+    
    
     
-    border:2px solid black;
+    
     
   }
   form{
