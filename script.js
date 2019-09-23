@@ -2,6 +2,30 @@
 
 //the display of the board
 const display = (()=>{
+
+
+    function showheatmap(player){
+        var heat=game.moveEval(player)
+        
+        heat.forEach(function(a,index){
+            if (a.eval === -10 ){ document.querySelector(`[number = "${a.cell}"]`).style.backgroundColor = "lightblue"; }
+            
+            if (a.eval === 10){ document.querySelector(`[number = "${a.cell}"]`).style.backgroundColor = "pink"; }
+            
+
+        }
+            )
+
+    
+    }
+
+
+
+
+
+
+
+
     const create = ()=>{
         const grid=document.querySelector(".grid")
         for (let i=0;i<9;i++){
@@ -35,7 +59,8 @@ const display = (()=>{
             
 
 return {create,
-    update}
+    update,
+    showheatmap}
 
 
 })()
@@ -89,7 +114,7 @@ const gameBoard = (()=>{
     }
     )() 
 
-//the state of the players (names, label, isp2human)
+//the state of the players (names, label, isp2human, unbeatable)
 //
 const players = ( ()=>{
     const playerMaker = (name,label) =>{
@@ -113,6 +138,10 @@ const players = ( ()=>{
     const isp2Human = ()=>{
         if (iaButton.checked ===true) {return false}  
         else return true }
+    const isIaUnbeatable = ()=>{
+        if (unbeatBut.checked ===true){return true}
+        else return false
+    }
 
 
 
@@ -121,7 +150,8 @@ const players = ( ()=>{
         pOne,
         pTwo,
         update,
-        isp2Human
+        isp2Human,
+        isIaUnbeatable
         }
     } 
     )()
@@ -129,6 +159,122 @@ const players = ( ()=>{
 //the state of the game (victorycheck, event listeners, IA, whose turn it is) , 
 
 const game = (()=>{
+
+    function bestMove(player){
+       let movearr = moveEval(player);
+       movearr.sort((a, b) => (a.eval > b.eval) ? 1 : -1).reverse()
+       if (player===1){return movearr[0].cell}
+       if (player ===0){return movearr[movearr.length-1].cell}
+       
+
+        
+
+    }
+
+    function moveEval(player){
+        
+        
+
+        const grid = gameBoard.showGrid();
+        const available=getAvailableMoves(grid);
+        const ratedmoves = available.map(
+            (available)=>{
+                let newgrid= [...grid];
+                newgrid.splice(available,1,player);
+                return {cell :available, 
+                    eval : evaluate(newgrid,player)}
+            
+
+            
+         }
+        )
+        
+        return ratedmoves
+    }
+
+        
+
+
+
+
+
+        function getAvailableMoves(grid){
+            let available =[];
+            for (let i=0;i<9;i++){
+                if (grid[i]===-1){available.push(i)}
+            }
+            
+            return available}
+        
+
+        function evaluate(oldgrid,token){
+            
+
+            if (game.victoryCheck(oldgrid)===2){return 0}
+            if (game.victoryCheck(oldgrid)===1){return 10}
+            if (game.victoryCheck(oldgrid)===0){return -10}
+
+            else{let newtoken
+                if (token===1){newtoken=0}
+                if (token===0){newtoken=1}
+                let available = getAvailableMoves(oldgrid);
+                let scores=[]
+                
+                for (let i=0;i<available.length;i++){
+                    
+                    let newgrid= [...oldgrid];
+                    newgrid.splice(available[i],1,newtoken);
+                    scores[i]=evaluate(newgrid,newtoken);
+                    
+                    }
+                    
+                    
+                if (newtoken ===0) {return Math.min( ...scores )}
+                if (newtoken ===1) {return Math.max( ...scores )}
+                
+                
+                    
+                    
+                 }
+            
+                
+                
+            }
+            
+            
+                
+                
+            
+            
+
+            
+
+            
+            
+            //win checka
+            /* if (game.victoryCheck(grid.splice(available[cell],1,token))===token){return 10}
+            else evaluate()
+            console.log(grid)  */
+        
+        
+        
+        
+        
+ 
+
+
+
+
+
+
+
+
+
+    
+
+
+
+
     function iAchoice(){
         const grid = gameBoard.showGrid();
         let available =[];
@@ -139,11 +285,16 @@ const game = (()=>{
         return available[choice]
     }
     function iAplay(){
-        gameBoard.setTokenAt(iAchoice(),1);
-                display.update();
-                turn="p1";
-                if (victoryCheck()!==-1){gameBoard.win(victoryCheck())}
+        if (players.isIaUnbeatable===false){
+            gameBoard.setTokenAt(iAchoice(),1);
+        }
+        else gameBoard.setTokenAt(bestMove(1),1);
+                    
+        
 
+        display.update();
+        turn="p1";
+        if (victoryCheck(gameBoard.showGrid())!==-1){gameBoard.win(victoryCheck(gameBoard.showGrid()))}
     }
     
         
@@ -161,7 +312,7 @@ const game = (()=>{
                 gameBoard.setTokenAt(celnum,0);
                 display.update();
                 turn = "p2";
-                if (victoryCheck()!==-1){gameBoard.win(victoryCheck())}
+                if (victoryCheck(gameBoard.showGrid())!==-1){gameBoard.win(victoryCheck(gameBoard.showGrid()))}
                 if (players.isp2Human()===false){iAplay()}
 
                 }
@@ -169,7 +320,7 @@ const game = (()=>{
                 gameBoard.setTokenAt(celnum,1);
                 display.update();
                 turn="p1";
-                if (victoryCheck()!==-1){gameBoard.win(victoryCheck())}
+                if (victoryCheck(gameBoard.showGrid())!==-1){gameBoard.win(victoryCheck(gameBoard.showGrid()))}
             }
          
         }
@@ -189,8 +340,8 @@ const game = (()=>{
             
 
     
-    const victoryCheck= ()=>{
-        const a = gameBoard.showGrid();
+    const victoryCheck= (a)=>{
+        
         //rows//
         if(a[0]===a[1] && a[1]===a[2] ){return a[0]}
         if(a[3]===a[4] && a[4]===a[5] ){return a[3]}
@@ -207,7 +358,12 @@ const game = (()=>{
 
         
         
-        else {return -1}
+        else {
+            if (a.includes(-1)) return -1
+            else {
+                return 2}
+            
+            }
         
         }
     
@@ -218,6 +374,10 @@ const game = (()=>{
     return{cellClick,
         turnCount,
         victoryCheck,
+        moveEval,
+        bestMove,
+        
+        
         
         }
 
@@ -229,9 +389,17 @@ const game = (()=>{
 const upbut=document.querySelector(".update");
 const resultField = document.querySelector(".result")
 const clearbut=document.querySelector(".clear");
+
+const iaButton = document.querySelector('#isIA');
+const unbeatBut = document.querySelector('#unbeatable');
+
+
+
+    
+
+
 upbut.addEventListener("click",players.update)
 clearbut.addEventListener("click",gameBoard.reset);
-const iaButton = document.querySelector('#isIA');
 iaButton.addEventListener("change", function(){
     if (iaButton.checked===true){
         document.querySelector('.p2name').value = "COMPUTER";
