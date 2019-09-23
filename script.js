@@ -62,12 +62,19 @@ const gameBoard = (()=>{
             game.turnCount = 0
         };
     const win = (val)=>{
+            
+
             if (val === 0){console.log("p1"); 
-            alert (`Desole ${players.pTwo.name}, mais ${players.pOne.name} te traite de ${players.pOne.label}`)
+            resultField.textContent =`Sorry, ${players.pTwo.name},  ${players.pOne.name} thinks you're a ${players.pOne.label} .`
         
         }
             if (val === 1){console.log("p2");
-            alert (`${players.pTwo.name} te traite de ${players.pTwo.label}. Il serait vraiment dans ton interêt d'etre moins ${players.pTwo.label}, mon cher ${players.pOne.name}.`)}
+            if (players.isp2Human()===false){
+                resultField.textContent = `The machine feels nothing toward you, ${players.pOne.name} .`
+
+            }
+
+            else resultField.textContent = `${players.pTwo.name} said you're quite a  ${players.pTwo.label}. You should try being less ${players.pTwo.label}, my dear ${players.pOne.name}.`}
         }
 
 
@@ -82,7 +89,7 @@ const gameBoard = (()=>{
     }
     )() 
 
-//the state of the players (names, label(x or o ... OR ANYTHING!))
+//the state of the players (names, label, isp2human)
 //
 const players = ( ()=>{
     const playerMaker = (name,label) =>{
@@ -93,6 +100,7 @@ const players = ( ()=>{
     const updatePlist = () => {
         pOne.name = document.querySelector('.p1name').value;
         pTwo.name = document.querySelector('.p2name').value;
+        isp2Human();
         }
     const updateLabel = () => {
         pOne.label = document.querySelector('.p1label').value;
@@ -102,6 +110,9 @@ const players = ( ()=>{
         updatePlist();
         updateLabel();
     }
+    const isp2Human = ()=>{
+        if (iaButton.checked ===true) {return false}  
+        else return true }
 
 
 
@@ -109,7 +120,8 @@ const players = ( ()=>{
     return {
         pOne,
         pTwo,
-        update
+        update,
+        isp2Human
         }
     } 
     )()
@@ -117,6 +129,30 @@ const players = ( ()=>{
 //the state of the game (victorycheck, event listeners, IA, whose turn it is) , 
 
 const game = (()=>{
+    function iAchoice(){
+        const grid = gameBoard.showGrid();
+        let available =[];
+        for (let i=0;i<9;i++){
+            if (grid[i]===-1){available.push(i)}
+        }
+        let choice = Math.floor(Math.random() * available.length)
+        return available[choice]
+    }
+    function iAplay(){
+        gameBoard.setTokenAt(iAchoice(),1);
+                display.update();
+                turn="p1";
+                if (victoryCheck()!==-1){gameBoard.win(victoryCheck())}
+
+    }
+    
+        
+
+
+
+
+
+    
     
     function cellClick (){
         let celnum = this.getAttribute("number");
@@ -126,6 +162,8 @@ const game = (()=>{
                 display.update();
                 turn = "p2";
                 if (victoryCheck()!==-1){gameBoard.win(victoryCheck())}
+                if (players.isp2Human()===false){iAplay()}
+
                 }
             else if (turnCount()===2){
                 gameBoard.setTokenAt(celnum,1);
@@ -180,6 +218,7 @@ const game = (()=>{
     return{cellClick,
         turnCount,
         victoryCheck,
+        
         }
 
 
@@ -188,9 +227,32 @@ const game = (()=>{
 
 //the starting state ()
 const upbut=document.querySelector(".update");
+const resultField = document.querySelector(".result")
 const clearbut=document.querySelector(".clear");
 upbut.addEventListener("click",players.update)
-clearbut.addEventListener("click",gameBoard.reset)
+clearbut.addEventListener("click",gameBoard.reset);
+const iaButton = document.querySelector('#isIA');
+iaButton.addEventListener("change", function(){
+    if (iaButton.checked===true){
+        document.querySelector('.p2name').value = "COMPUTER";
+        document.querySelector('.p2label').value = "i have no feelings";
+        document.querySelector('.p1name').value = "human being";
+        document.querySelector('.p1label').value = "dumb robot"
+        players.update()
+    
+        }
+    else {document.querySelector('.p2name').value = "";
+    document.querySelector('.p2label').value="";
+    document.querySelector('.p1name').value = "";
+    document.querySelector('.p1label').value = ""}
+}
+    
+        )
+/* 
+    document.querySelector('.p2name').value = "COMPUTAH";
+    
+} */
+
 
 display.create();
 
