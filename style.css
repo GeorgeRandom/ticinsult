@@ -51,6 +51,10 @@
     font-weight: normal; 
     padding-bottom: 50px;
   }
+  .main{
+    max-width: 800px;
+    text-align: center;
+  }
   .grid{
     margin-left:10%;
     margin-right:20%;
