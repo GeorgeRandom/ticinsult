@@ -3,7 +3,7 @@
 //the display of the board
 const display = (()=>{
 
-
+/* 
     function showheatmap(player){
         var heat=game.moveEval(player)
         
@@ -17,7 +17,7 @@ const display = (()=>{
             )
 
     
-    }
+    } */
 
 
 
@@ -60,7 +60,7 @@ const display = (()=>{
 
 return {create,
     update,
-    showheatmap}
+    }
 
 
 })()
@@ -87,6 +87,17 @@ const gameBoard = (()=>{
             game.turnCount = 0
         };
     const win = (val)=>{
+            if (val=== 2 && players.isp2Human()===true){
+                generateInsult();
+                
+                
+
+            }
+                
+            
+            if (val=== 2 && players.isp2Human()===false){
+                resultField.textContent = ` NO. HARD. FEELINGS.`
+            }
             
 
             if (val === 0){console.log("p1"); 
@@ -424,6 +435,20 @@ iaButton.addEventListener("change", function(){
 
 display.create();
 
+
+///fonds de poches
+function generateInsult(){
+    let insult1=["Boob","Slime","Table","Ostrich","Gazebo","Splice","Gum","Fountain","Bubble","Fucker","Turkish","Goggle","Very nice","Parrot","German"]
+    let insult2=[" Sponges","swimmers"," Dogs","-sitters"," people","fuckers","Lickers","-repair-men"," food", " turnips"," snatchers"," functions", " tables"]
+    let totalinsult= `${insult1[(Math.floor(Math.random() * 15))]}${insult2[(Math.floor(Math.random() * 13))]}`
+                
+    resultField.textContent = ` ${players.pOne.name}, ${players.pTwo.name}, you're both ${totalinsult}`
+    var waat = document.createElement("button");
+                waat.textContent="whaaat?";
+                waat.addEventListener("click",generateInsult);
+                resultField.appendChild(waat)
+
+}
     
 
 
