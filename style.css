@@ -99,9 +99,10 @@
   grid-template-columns: 1fr 1fr;
   max-height:300px;
   border: 1px solid grey;
-  background-color: rgb(194, 235, 245);  
+  background-color: rgb(224, 253, 255);  
   justify-items: center;
   border-radius: 30px;
+  
 
 }
 .ok1,.update{
@@ -109,12 +110,14 @@
   width: 100px;
   height:40px;
   
+  
 }
 .title{
   grid-column: span 2;
 }
 input{
   border-radius: 2px;
+  padding: 3px;
 
 }
 .toplay{
