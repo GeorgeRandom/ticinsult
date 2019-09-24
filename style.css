@@ -46,10 +46,11 @@
   }
   h1{
     text-align: center;
-    font-family: cursive;
+    font-family: initial;
     font-weight: normal; 
     padding-bottom: 50px;
     font-style: italic;
+    letter-spacing: +3px;
   }
   .main{
     max-width: 800px;
@@ -98,14 +99,15 @@
   grid-template-columns: 1fr 1fr;
   max-height:300px;
   border: 1px solid grey;
-  
+  background-color: rgb(194, 235, 245);  
   justify-items: center;
+  border-radius: 30px;
 
 }
 .ok1,.update{
   grid-column: span 2;
   width: 100px;
-  height:50px;
+  height:40px;
   
 }
 .title{
@@ -126,4 +128,10 @@ img.hidden{
 .resultbox{
   display:grid;
   grid-template-columns:80px 1fr 80px;
+  font-family: initial;
+ font-weight: normal; 
+  
+  font-style: italic;
+  letter-spacing: +3px;
+  padding-top:20px;
 }
