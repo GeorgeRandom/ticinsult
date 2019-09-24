@@ -1,4 +1,74 @@
+//the intro
+const intro = (()=>{
+    const toForm2=()=>{
+        players.update();
+        if (players.pOne.name===""||players.pTwo.name===""){
+            return
+        }
+        else{
+            form1.style.display="none";
+            form2.style.display="grid";
+            
+            
+            
 
+            if (players.isp2Human()===true){
+                unbeatBut.style.display="none"
+                document.querySelector(".unbeat").textContent=""
+                
+            }
+            else {
+                unbeatBut.style.display=""
+                
+                document.querySelector(".unbeat").textContent="unbeatable AI?"
+            }
+            document.querySelector("#showp1name").textContent=`${players.pOne.name}`
+            document.querySelector("#showp2name").textContent=`${players.pTwo.name}`
+        }
+            
+
+
+    }
+    const toGame=()=>{
+        players.update()
+        if (players.pOne.label===""||players.pTwo.label===""){
+            return}
+        else{
+        form2.style.display="none";
+        players.update();
+        display.create();
+        gameBoard.reset()
+    }
+    }
+    const restart=()=>{
+        display.destroy();
+        form1.style.display="grid";
+        form2.style.display="none";
+        let res=document.querySelector(".restart")
+        res.removeChild(res.firstChild)
+    }
+
+
+
+
+
+
+
+
+
+return {
+    toForm2,
+    toGame,
+    restart
+    }
+
+}
+
+
+
+
+
+)()
 
 //the display of the board
 const display = (()=>{
@@ -18,6 +88,21 @@ const display = (()=>{
 
     
     } */
+    const destroy=()=>{
+        const grid=document.querySelector(".grid")
+        while(grid.hasChildNodes()) {  
+            grid.removeChild(grid.firstChild);
+            }
+        while (resultField.hasChildNodes()){
+            resultField.removeChild(resultField.firstChild)
+            }
+        allflowers.forEach((flower)=>
+        flower.classList.add("hidden"))
+        
+        
+        
+           
+    }
 
 
 
@@ -27,6 +112,7 @@ const display = (()=>{
 
 
     const create = ()=>{
+        document.querySelector(".toplay").textContent=`${players.pOne.name} to play`;
         const grid=document.querySelector(".grid")
         for (let i=0;i<9;i++){
             let cell = document.createElement("div");
@@ -60,6 +146,7 @@ const display = (()=>{
 
 return {create,
     update,
+    destroy
     }
 
 
@@ -84,9 +171,10 @@ const gameBoard = (()=>{
 	const reset = () => {
             grid.fill(-1);
             display.update();
-            game.turnCount = 0
+            game.turnCount = 1
         };
     const win = (val)=>{
+        document.querySelector(".toplay").textContent=``;
             if (val=== 2 && players.isp2Human()===true){
                 generateInsult();
                 
@@ -111,6 +199,14 @@ const gameBoard = (()=>{
             }
 
             else resultField.textContent = `${players.pTwo.name} said you're quite a  ${players.pTwo.label}. You should try being less ${players.pTwo.label}, my dear ${players.pOne.name}.`}
+        
+        const finalButton=document.createElement("button");
+        finalButton.textContent="RESTART";
+        allflowers.forEach((flower)=>
+        flower.classList.remove("hidden"))
+                finalButton.addEventListener("click",intro.restart);
+                document.querySelector(".restart").appendChild(finalButton)
+        
         }
 
 
@@ -296,7 +392,7 @@ const game = (()=>{
         return available[choice]
     }
     function iAplay(){
-        if (players.isIaUnbeatable===false){
+        if (players.isIaUnbeatable()===false){
             gameBoard.setTokenAt(iAchoice(),1);
         }
         else gameBoard.setTokenAt(bestMove(1),1);
@@ -305,6 +401,7 @@ const game = (()=>{
 
         display.update();
         turn="p1";
+        document.querySelector(".toplay").textContent=`${players.pOne.name} to play`;
         if (victoryCheck(gameBoard.showGrid())!==-1){gameBoard.win(victoryCheck(gameBoard.showGrid()))}
     }
     
@@ -317,34 +414,49 @@ const game = (()=>{
     
     
     function cellClick (){
-        let celnum = this.getAttribute("number");
-        if (gameBoard.getTokenAt(celnum)===-1){
-            if (turnCount()===1){
-                gameBoard.setTokenAt(celnum,0);
-                display.update();
-                turn = "p2";
-                if (victoryCheck(gameBoard.showGrid())!==-1){gameBoard.win(victoryCheck(gameBoard.showGrid()))}
-                if (players.isp2Human()===false){iAplay()}
+        
+        
+            let celnum = this.getAttribute("number");
+            if (gameBoard.getTokenAt(celnum)===-1){
+                if (turnCount()===1){
+                    gameBoard.setTokenAt(celnum,0);
+                    display.update();
+                    turn = "p2";
+                    document.querySelector(".toplay").textContent=`${players.pTwo.name} to play`;
+                    
+                    if (victoryCheck(gameBoard.showGrid())!==-1){gameBoard.win(victoryCheck(gameBoard.showGrid()))}
+                    else if (players.isp2Human()===false){iAplay()}
 
+                    }
+                else if (turnCount()===2){
+                    if (gameBoard.showGrid().every((a)=>a===-1)===false){
+                    gameBoard.setTokenAt(celnum,1);
+                    display.update();
+                    turn="p1";
+                    document.querySelector(".toplay").textContent=`${players.pOne.name} to play`;
+                    
+                    if (victoryCheck(gameBoard.showGrid())!==-1){gameBoard.win(victoryCheck(gameBoard.showGrid()))}
+                    }
+                
+                    turn="p1"
                 }
-            else if (turnCount()===2){
-                gameBoard.setTokenAt(celnum,1);
-                display.update();
-                turn="p1";
-                if (victoryCheck(gameBoard.showGrid())!==-1){gameBoard.win(victoryCheck(gameBoard.showGrid()))}
+            
             }
-         
-        }
+        
 
-        console.log("click!", celnum)
+        
     }
 
-
-    var turn = "p1";
+    
+    let turn = "p1";
     const turnCount = ()=>{
         
-        if (turn ==="p1"){return 1}
-        else if (turn ==="p2"){return 2}
+        if (turn ==="p1"){
+            
+            return 1}
+        else if (turn ==="p2"){
+            
+            return 2}
     }
             
        
@@ -390,6 +502,7 @@ const game = (()=>{
         
         
         
+        
         }
 
 
@@ -397,26 +510,39 @@ const game = (()=>{
 )()
 
 //the starting state ()
+const allflowers=document.querySelectorAll(".flower")
 const upbut=document.querySelector(".update");
 const resultField = document.querySelector(".result")
 const clearbut=document.querySelector(".clear");
 
+const okBut=document.querySelector('.ok1')
 const iaButton = document.querySelector('#isIA');
 const unbeatBut = document.querySelector('#unbeatable');
+const form1=document.querySelector(".firstForm");
+const form2=document.querySelector(".secondform");
+const form2p1=document.querySelector(".form2p1");
+const form2p2=document.querySelector(".form2p2")
+
+
+
+okBut.addEventListener("click",intro.toForm2)
 
 
 
     
 
 
-upbut.addEventListener("click",players.update)
-clearbut.addEventListener("click",gameBoard.reset);
+upbut.addEventListener("click",intro.toGame)
+
 iaButton.addEventListener("change", function(){
     if (iaButton.checked===true){
+        players.update()
         document.querySelector('.p2name').value = "COMPUTER";
         document.querySelector('.p2label').value = "i have no feelings";
-        document.querySelector('.p1name').value = "human being";
-        document.querySelector('.p1label').value = "dumb robot"
+        if (players.pOne.name===""){
+             document.querySelector('.p1name').value = "human being"}
+        if (players.pOne.label===""){
+            document.querySelector('.p1label').value = "dumb robot"}
         players.update()
     
         }
@@ -433,7 +559,7 @@ iaButton.addEventListener("change", function(){
 } */
 
 
-display.create();
+/* display.create(); */
 
 
 ///fonds de poches
@@ -442,7 +568,7 @@ function generateInsult(){
     let insult2=[" Sponges","swimmers"," Dogs","-sitters"," people","fuckers","Lickers","-repair-men"," food", " turnips"," snatchers"," functions", " tables"]
     let totalinsult= `${insult1[(Math.floor(Math.random() * 15))]}${insult2[(Math.floor(Math.random() * 13))]}`
                 
-    resultField.textContent = ` ${players.pOne.name}, ${players.pTwo.name}, you're both ${totalinsult}`
+    resultField.textContent = ` ${players.pOne.name}, ${players.pTwo.name}, you're both ${totalinsult}   `
     var waat = document.createElement("button");
                 waat.textContent="whaaat?";
                 waat.addEventListener("click",generateInsult);
