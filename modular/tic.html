@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+    <title>TIC TAC TOE</title>
+<body>
+    
+
+    <div class="main">
+            <h1>
+                    Witty Duel
+                    
+                    
+                </h1>
+
+
+        <form class="firstForm" style="display:grid">
+            <div class="names title">
+            NAMES:</div>
+                <div>
+                PLAYER 1 :<br>
+                <input class="p1name" type="text" maxlength="20" placeholder="player 1" > <br></div>
+                <div>
+                PLAYER 2 :<bR>
+                <input class="p2name" type="text" maxlength="20" placeholder="player 2">
+                AI <input type="checkbox" id="isIA" value="yes"><br>
+                </div>
+                <input type="button" class="ok1" value="OK">
+               
+            
+                
+                
+            </form>
+            <form class="secondform" style = "display:none">
+                <div class="insult title">
+                now, carefully choose your insults.</div>
+            <div class="form2p1">
+
+                <div id="showp1name"></div>
+                <input class="p1label" type="text" maxlength="15" placeholder="bad person">
+                </div>
+            <div class="form2p2" >
+                <div id="showp2name"></div>
+                    
+                    <input class="p2label" type="text" maxlength="15" placeholder="lollygagger">
+            
+              <div class="unbeat"> </div>      
+            <input type="checkbox" id="unbeatable" value="yes">
+        </div>
+            
+            <button type="button" class="update">GO</button> 
+            
+        </form>
+
+
+        <div class="toplay"></div>
+        
+        <div class="grid">
+
+        </div>
+    <div class="resultbox">
+        <img class="flower left hidden" src="./flowers/flowleft.png" height="80"width="80">
+            
+        <div class = "result">
+        </div>
+            
+
+        <img class="flower right hidden" src="./flowers/flowright.png" height="80"width="80">
+        </div>
+    <br>
+    <div class="restart"></div>
+       
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+<script src="script.js">
+
+
+</script>
+</html>
