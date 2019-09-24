@@ -73,21 +73,7 @@ return {
 //the display of the board
 const display = (()=>{
 
-/* 
-    function showheatmap(player){
-        var heat=game.moveEval(player)
-        
-        heat.forEach(function(a,index){
-            if (a.eval === -10 ){ document.querySelector(`[number = "${a.cell}"]`).style.backgroundColor = "lightblue"; }
-            
-            if (a.eval === 10){ document.querySelector(`[number = "${a.cell}"]`).style.backgroundColor = "pink"; }
-            
 
-        }
-            )
-
-    
-    } */
     const destroy=()=>{
         const grid=document.querySelector(".grid")
         while(grid.hasChildNodes()) {  
@@ -347,40 +333,7 @@ const game = (()=>{
                 
                 
             }
-            
-            
-                
-                
-            
-            
-
-            
-
-            
-            
-            //win checka
-            /* if (game.victoryCheck(grid.splice(available[cell],1,token))===token){return 10}
-            else evaluate()
-            console.log(grid)  */
-        
-        
-        
-        
-        
- 
-
-
-
-
-
-
-
-
-
-    
-
-
-
+      
 
     function iAchoice(){
         const grid = gameBoard.showGrid();
@@ -414,6 +367,7 @@ const game = (()=>{
     
     
     function cellClick (){
+        //c'est la que ca commence à partir en couille.
         
         
             let celnum = this.getAttribute("number");
@@ -447,7 +401,7 @@ const game = (()=>{
         
     }
 
-    
+    //le machin qui compte les tours. Il marche, mais je sais pas pourquoi.
     let turn = "p1";
     const turnCount = ()=>{
         
@@ -553,13 +507,7 @@ iaButton.addEventListener("change", function(){
 }
     
         )
-/* 
-    document.querySelector('.p2name').value = "COMPUTAH";
-    
-} */
 
-
-/* display.create(); */
 
 
 ///fonds de poches
