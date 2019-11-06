@@ -5,9 +5,9 @@ It is based on an assignment by [The Odin Project](https://www.theodinproject.co
 and now includes an "unbeatable" AI mode.
 
 --- To improve:
--Strange behavior when player 1 wins (needs 1 more click to reset), probably due to a timer somewhere being too encapsulated.
--Code is super ugly.
--Needs way more flowers.
+- Strange behavior when player 1 wins (needs 1 more click to reset), probably due to a timer somewhere being too encapsulated.
+- Code is super ugly.
+- Needs way more flowers.
 
 
 
